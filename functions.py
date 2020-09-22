@@ -118,7 +118,7 @@ def format_rank_info(league,t):
     team_WLT += '-' + str(s['ties']) if s['ties'] > 0 else ''
     lines.append(team_WLT + ', ' + str(s['season_points']) + ' points')
     if last_week > 1:
-        previous_rank = league.get_team_power_rank(t['team'], last_week - 1)
+        previous_rank = league.get_power_rank(t['team'], last_week - 1)
         lines.append('Last week rank: ' + str(previous_rank['rank']))
     html = format_html_list(lines)
     return html
@@ -135,7 +135,7 @@ def format_extra_info(league,t):
     row.append({'Dominance score': str(t['score'])})
     row.append({'Standings position': str(league.get_standings_position(team, last_week))})
     if last_week > 1:
-        row.append({'Prev standings pos': str(league.get_standings_position(team, last_week - 1))})
+        row.append({'Prev standing pos': str(league.get_standings_position(team, last_week - 1))})
     html+= format_html_table(row)
 
     row = list()
@@ -171,7 +171,7 @@ def format_extra_info(league,t):
     row.append({'Opponent': box.opponent.team_name})
     row.append({'Opponent points': str(box.opponent_points)})
     if last_week > 1:
-        row.append({'Oppt prev rank': str(league.get_team_power_rank(box.opponent,last_week - 1))})
+        row.append({'Oppt prev rank': str(league.get_power_rank(box.opponent,last_week - 1)['rank'])})
     html += format_html_table(row)
 
     row = list()
