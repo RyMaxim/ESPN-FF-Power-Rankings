@@ -296,8 +296,9 @@ def send_email(subject,html_body):
         #initializing the server connection
         yag = yagmail.SMTP(user=_EMAIL_FROM, password=_EMAIL_PASS)
         #sending the email
-        yag.send(to=_EMAIL_TO, subject=subject, contents=html_body)
-        print("Email sent successfully", flush=True)
+        for email in _EMAIL_TO.split(','):
+            yag.send(to=email, subject=subject, contents=html_body)
+            print("Email sent successfully to " + email, flush=True)
     except:
-        print("Error, email was not sent", flush=True)
+        print("Error, one or more emails were not sent", flush=True)
         raise Exception("Email failed to send!")
