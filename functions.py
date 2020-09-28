@@ -83,6 +83,22 @@ def format_league_info(league):
                  + underachiever.team.team_name \
                  + ')')
 
+    large_mov = league.largest_mov(last_week)
+    lines.append('<strong>Biggest blowout:</strong> ' \
+                 + str(large_mov['mov']) \
+                 + ' (' \
+                 + large_mov['winner'].team_name \
+                 + ' vs ' \
+                 + large_mov['loser'].team_name \
+                 + ')')
+    small_mov = league.smallest_mov(last_week)
+    lines.append('<strong>Closest finish:</strong> ' \
+                 + str(small_mov['mov']) \
+                 + ' (' \
+                 + small_mov['winner'].team_name \
+                 + ' vs ' \
+                 + small_mov['loser'].team_name \
+                 + ')')
     formatted = format_html_list(lines)
     html = '<p>' + formatted + '</p>'
     print('', flush=True)

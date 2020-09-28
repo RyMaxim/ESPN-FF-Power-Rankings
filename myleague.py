@@ -73,50 +73,72 @@ class MyLeague(ESPNLeague):
             if t['team'].team_id == team.team_id:
                 return t
 
-    def get_total_points_rank(self,team,week):
+    def get_total_points_rank(self,team,week):  # more points = higher rank
         standings = sorted(self.get_standings(week), key=lambda t: t['season_points'], reverse=True)
         for t in standings:
             if t['team'].team_id == team.team_id:
                 return standings.index(t) + 1
 
-    def get_total_points_against_rank(self,team,week):
-        standings = sorted(self.get_standings(week), key=lambda t: t['season_points_against'], reverse=False)
+    def get_total_points_against_rank(self,team,week):  # more points against = higher rank
+        standings = sorted(self.get_standings(week), key=lambda t: t['season_points_against'], reverse=True)
         for t in standings:
             if t['team'].team_id == team.team_id:
                 return standings.index(t) + 1
 
-    def top_team_week(self,week):
+    def top_team_week(self,week):  # team with the most points in a given week
         self.teams = sorted(self.teams, key=lambda t: int(t.scores[week - 1]), reverse=True)
         return self.teams[0]
 
-    def bottom_team_week(self,week):
+    def bottom_team_week(self,week):  # team with the least points in a given week
         self.teams = sorted(self.teams, key=lambda t: int(t.scores[week - 1]), reverse=False)
         return self.teams[0]
 
-    def top_player_week(self,week):
+    def top_player_week(self,week):  # player with the most points in a given week
         players = list()
         for team in self.teams:
             players.append(team.top_player(week))
         players = sorted(players, key=lambda p: int(p.points), reverse=True)
         return players[0]
 
-    def bottom_player_week(self,week):
+    def bottom_player_week(self,week):  # player with the least points in a given week
         players = list()
         for team in self.teams:
             players.append(team.bottom_player(week))
         players = sorted(players, key=lambda p: int(p.points), reverse=False)
         return players[0]
 
-    def overachiever(self,week):
+    def overachiever(self,week):  # player with the highest score compared to projected points in a given week
         players = list()
         for team in self.teams:
             players.append(team.overachiever(week))
         players = sorted(players, key=lambda p: int(p.diff), reverse=True)
         return players[0]
 
-    def underachiever(self,week):
+    def underachiever(self,week):  # player with the lowest score compared to projected points in a given week
         players = list()
         for team in self.teams:
             players.append(team.underachiever(week))
         players = sorted(players, key=lambda p: int(p.diff), reverse=False)
         return players[0]
+
+    def largest_mov(self,week):  # team and opponent with the highest margin of victory in a given week
+        mov = 0
+        for team in self.teams:
+            if team.mov[week - 1] > mov:
+                mov = team.mov[week - 1]
+                winner = team
+                loser = team.schedule[week - 1]
+        return {'mov': mov,
+                'winner': winner,
+                'loser': loser}
+
+    def smallest_mov(self,week):  # team and opponent with the lowest margin of victory in a given week
+        mov = 1000
+        for team in self.teams:
+            if team.mov[week - 1] < mov and team.mov[week - 1] >= 0:
+                mov = team.mov[week - 1]
+                winner = team
+                loser = team.schedule[week - 1]
+        return {'mov': mov,
+                'winner': winner,
+                'loser': loser}
