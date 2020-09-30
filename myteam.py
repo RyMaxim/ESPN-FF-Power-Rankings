@@ -1,30 +1,34 @@
 from espn_api.football import Team as ESPNTeam
 from myboxscore import MyBoxScore
-import functions
 
 class MyTeam(ESPNTeam):
-    def build_boxscore(self,boxscores):
+    def build_boxscore(self,box_scores):
         if not hasattr(self, 'boxscores'):
             self.boxscores = list()
-        for game in boxscores:
-            if game.home_team.team_id == self.team_id:
-                self.boxscores.append(MyBoxScore(game,'home'))
-                break
-            if game.away_team.team_id == self.team_id:
-                self.boxscores.append(MyBoxScore(game,'away'))
-                break
+        for game in box_scores:
+            if game.home_team == 0:
+                if game.away_team.team_id == self.team_id:
+                    self.boxscores.append(MyBoxScore(game,'away','BYE'))
+                    break
+            if game.away_team == 0:
+                 if game.home_team.team_id == self.team_id:
+                    self.boxscores.append(MyBoxScore(game,'home','BYE'))
+                    break
+            if game.home_team and game.away_team:
+                if game.home_team.team_id == self.team_id:
+                    self.boxscores.append(MyBoxScore(game,'home'))
+                    break
+                if game.away_team.team_id == self.team_id:
+                    self.boxscores.append(MyBoxScore(game,'away'))
+                    break
 
     def get_season_points(self,week):
         season_points = 0
-        #for boxscore in self.boxscores[:week]:
-        #    season_points += boxscore.points
         season_points = sum(boxscore.points for boxscore in self.boxscores[:week])
         return season_points
 
     def get_season_points_against(self,week):
         season_points_against = 0
-        #for boxscore in self.boxscores[:week]:
-        #    season_points_against += boxscore.opponent_points
         season_points_against = sum(boxscore.opponent_points for boxscore in self.boxscores[:week])
         return season_points_against
 

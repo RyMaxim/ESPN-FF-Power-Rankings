@@ -1,6 +1,5 @@
 from espn_api.football import League as ESPNLeague
 from myteam import MyTeam
-import functions
 
 class MyLeague(ESPNLeague):
     def convert_teams(self):  # convert Team objects to MyTeam subclass
@@ -10,20 +9,16 @@ class MyLeague(ESPNLeague):
     def build_boxscores(self):
         print('', flush=True)
         print('BUILDING AND ANALYZING BOXSCORES...', flush=True)
-        this_week = self.current_week
-        last_week = this_week - 1 if this_week > 1 else 1
-        for w in range(1,last_week + 1):  # aggregate all box scores for each week of the season
+        for w in range(1,self.current_week + 1):  # aggregate all box scores for each week of the season
             box_scores = self.box_scores(w)
             for team in self.teams:  # add the box scores to a list of boxscore objects for each team
                 team.build_boxscore(box_scores)
 
     def build_power_rankings(self):
-        print()
-        print('BUILDING POWER RANKINGS...')
-        this_week = self.current_week
-        last_week = this_week - 1 if this_week > 1 else 1
+        print('', flush=True)
+        print('BUILDING POWER RANKINGS...', flush=True)
         self.all_power_rankings = list()
-        for week in range(1,last_week + 1):  # calculate power rankings for each week of the season
+        for week in range(1,self.current_week + 1):  # calculate power rankings for each week of the season
             week_rankings = list()
             power_rankings = self.power_rankings(week)
             for t in self.power_rankings(week):
@@ -35,10 +30,8 @@ class MyLeague(ESPNLeague):
     def build_standings(self):
         print('', flush=True)
         print('BUILDING STANDINGS...', flush=True)
-        this_week = self.current_week
-        last_week = this_week - 1 if this_week > 1 else 1
         self.all_standings = list()
-        for week in range(1,last_week + 1):  # calculate standings list for each week of the season
+        for week in range(1,self.current_week + 1):  # calculate standings list for each week of the season
             week_standings = list()
             for team in self.teams:  # get information about each team's weekly stats
                 week_standings.append({'team': team,

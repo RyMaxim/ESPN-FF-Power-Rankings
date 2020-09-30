@@ -1,4 +1,4 @@
-## ESPN Fantasy Football Power Rankings
+## ESPN Fantasy Football- Scholars and Gentlemen
 
 Currently using this module to do most of the heavy lifting: https://github.com/cwendt94/espn-api
 

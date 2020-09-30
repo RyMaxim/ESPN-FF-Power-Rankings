@@ -1,19 +1,15 @@
 class MyBoxScore():
-    def __init__(self,boxscore,pos):
+    def __init__(self,boxscore,pos,bye=None):
         if pos == 'home':
-            self.team = boxscore.home_team
-            self.points = boxscore.home_score
-            self.lineup = boxscore.home_lineup
-            self.opponent = boxscore.away_team
-            self.opponent_points = boxscore.away_score
-            self.opponent_lineup = boxscore.away_lineup
+            opp = 'away'
         if pos == 'away':
-            self.team = boxscore.away_team
-            self.points = boxscore.away_score
-            self.lineup = boxscore.away_lineup
-            self.opponent = boxscore.home_team
-            self.opponent_points = boxscore.home_score
-            self.opponent_lineup = boxscore.home_lineup
+            opp = 'home'
+        self.team = getattr(boxscore,pos + '_team')
+        self.points = getattr(boxscore,pos + '_score')
+        self.lineup = getattr(boxscore,pos + '_lineup')
+        self.opponent = getattr(boxscore,opp + '_team') if not bye else 'BYE'
+        self.opponent_points = getattr(boxscore,opp + '_score') if not bye else 0
+        self.opponent_lineup = getattr(boxscore,opp + '_lineup') if not bye else []
         for player in self.lineup:
             player.team = self.team
         for player in self.opponent_lineup:
