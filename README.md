@@ -1,4 +1,4 @@
-## ESPN Fantasy Football- Scholars and Gentlemen
+## ESPN Fantasy Football Power Rankings
 
 Currently using this module to do most of the heavy lifting: https://github.com/cwendt94/espn-api
 
@@ -11,6 +11,7 @@ Output email is pre-formatted with power rankings list including rank, team name
 - Previous game info including result, score, bench points, opponent, and opponent points
 - Breakdown of best and worst performing players from last week's game
 - List of any "goose eggs" - starting players who scored 0 or less points
+- List of any "outstanding benchwarmers" - bench players that scored 25+ points AND outscored a starter in a position they could have played in
 - Information about the next opponent (unless the season is over)
 
 Output email also includes a small header section with highest and lowest scoring teams as well as info about best and worst performing players as well as the teams they are on

@@ -96,7 +96,7 @@ def format_league_info(league,week):
 
 def format_power_rankings(league,week):
     print('', flush=True)
-    print('Formatting power rankings for week ' + str(week), flush=True)
+    print('FORMATTING POWER RANKINGS EMAIL... ', flush=True)
     power_rankings = league.all_power_rankings[week - 1]
     header = 'Power rankings:'
     html = '<p><h3>' + header + '</h3>'
@@ -143,12 +143,9 @@ def format_extra_info(league,t,week):
     row = list()
     row.append({'Season points': str(team_stats['season_points'])})
     row.append({'Seas. pts against': str(team_stats['season_points_against'])})
-    season_points_diff = team_stats['season_points'] - team_stats['season_points_against']
-    if season_points_diff > 0:
-        season_diff_text = '+' + str(season_points_diff)
-    else:
-        season_diff_text = str(season_points_diff)
-    row.append({'Season pts diff': season_diff_text})
+    season_diff = team_stats['season_points'] - team_stats['season_points_against']
+    season_diff = '+' + str(season_diff) if season_diff > 0 else str(season_diff)
+    row.append({'Season pts diff': str(season_diff)})
     html += html_utils.format_table(row)
 
     row = list()
@@ -160,6 +157,9 @@ def format_extra_info(league,t,week):
 
     row = list()
     row.append({'Game result': team.streak_type})
+    MOV = box.points - box.opponent_points
+    MOV = '+' + str(MOV) if MOV > 0 else MOV
+    row.append({'Margin of victory': str(MOV)})
     row.append({'Current streak': str(team.streak_length) + 'x ' + team.streak_type})
     html += html_utils.format_table(row)
 
@@ -211,6 +211,11 @@ def format_extra_info(league,t,week):
         row.append({'Goose eggs': format_goose_eggs(box.goose_eggs)})
         html += html_utils.format_table(row)
 
+    if len(box.bench_heroes) > 0:
+        row = list()
+        row.append({'Outstanding benchwarmers': format_bench_heroes(box.bench_heroes)})
+        html += html_utils.format_table(row)
+
     next_week = week + 1
     if next_week <= len(team.schedule):
         row = list()
@@ -238,9 +243,22 @@ def format_goose_eggs(goose_eggs):
         html += str(player.points) \
                 + ' (' \
                 + str(player.projected_points) \
-                + ' proj) : ' \
+                + ' proj): ' \
                 + player.name \
                 + ' - ' + player.slot_position
         if goose_eggs.index(player) + 1 != len(goose_eggs):
+            html += '<br>'
+    return html
+
+def format_bench_heroes(bench_heroes):
+    html = ''
+    for p in bench_heroes:
+        html += str(p['player'].points) \
+                + ' (' \
+                + str(p['player'].projected_points) \
+                + ' proj): ' \
+                + p['player'].name \
+                + ' - ' + p['position']
+        if bench_heroes.index(p) + 1 != len(bench_heroes):
             html += '<br>'
     return html
